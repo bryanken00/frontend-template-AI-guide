@@ -15,7 +15,7 @@ createRoot(document.getElementById("root")).render(
       <ConfigProvider
         theme={{
           token: {
-            colorPrimary: import.meta.env.VITE_PRIMARY_COLOR || "#3b82f6",
+            colorPrimary: "#3b82f6",
             colorBgBase: "#fff",
           },
         }}

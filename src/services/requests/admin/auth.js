@@ -9,7 +9,7 @@ import {
 } from "../../api/admin/auth";
 
 export const useLoginAdminAuth = () => {
-  const { setToken, setUserData, setPermissions } =
+  const { setToken, setUserData, setOrganization, setPermissions } =
     useAdminAuthStore.getState();
   const { setCsrfToken } = useCsrfStore.getState();
 
@@ -18,6 +18,7 @@ export const useLoginAdminAuth = () => {
     onSuccess: (data) => {
       setToken(data.token);
       setUserData(data.user);
+      setOrganization(data.organization || null);
       setPermissions(data.permissions || []);
 
       // Fetch CSRF token after successful login

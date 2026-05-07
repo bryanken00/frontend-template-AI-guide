@@ -5,7 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getUserPermissions,
   bulkUpdateUserPermissions,
-} from "../../../../services/api/admin/user-permissions";
+} from "../../../../../services/api/admin/user-permissions";
 
 const { Option } = Select;
 

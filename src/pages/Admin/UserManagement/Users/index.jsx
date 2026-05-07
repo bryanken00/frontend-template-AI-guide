@@ -1,25 +1,32 @@
-import { useState } from "react";
 import {
-  Table,
-  Button,
-  Input,
-  Empty,
-  Spin,
-  Popconfirm,
-  Alert,
-  Drawer,
-} from "antd";
-import {
+  DeleteOutlined,
+  FilterOutlined,
   PlusOutlined,
   ReloadOutlined,
-  FilterOutlined,
-  DeleteOutlined,
 } from "@ant-design/icons";
-import { Search, User, Users, CheckCircle, Briefcase } from "lucide-react";
+import {
+  Alert,
+  Button,
+  Col,
+  Drawer,
+  Empty,
+  Input,
+  Popconfirm,
+  Row,
+  Select,
+  Spin,
+  Table,
+  Typography,
+} from "antd";
+import { useState } from "react";
+import { Search, Users } from "lucide-react";
 import { useUserHooks } from "./hooks";
-import UserForm from "./UserForm";
-import UserViewModal from "./UserViewModal";
-import UserPermissionsDrawer from "./UserPermissionsDrawer";
+import UserForm from "./components/UserForm";
+import UserViewModal from "./components/UserViewModal";
+import UserPermissionsDrawer from "./components/UserPermissionsDrawer";
+import StatCard from "../../../../components/StatCard";
+
+const { Title, Text } = Typography;
 
 const UsersPage = () => {
   const {
@@ -57,394 +64,428 @@ const UsersPage = () => {
 
   const [isFilterVisible, setIsFilterVisible] = useState(false);
 
-  const handleRefresh = () => {
-    refetch?.();
-  };
-
   const totalUsers = data?.users?.length || 0;
   const activeUsers =
     data?.users?.filter((u) => u.status === "Active").length || 0;
+  const inactiveUsers = totalUsers - activeUsers;
   const hasSelectedRows = selectedRowKeys.length > 0;
+  const hasActiveFilters = search || positionFilter || statusFilter;
 
   if (error) {
     return (
-      <div className="flex items-center justify-center w-full h-full p-4 bg-gradient-to-br from-white to-slate-50">
-        <div className="w-full max-w-2xl">
-          <Alert
-            message="Error Loading Users"
-            description={
-              error.message || "Failed to load users data. Please try again."
-            }
-            type="error"
-            showIcon
-            closable
-            className="shadow-sm"
-          />
-        </div>
+      <div className="p-6">
+        <Alert
+          message="Error Loading Users"
+          description={
+            error.message || "Failed to load users data. Please try again."
+          }
+          type="error"
+          showIcon
+        />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50/30 p-6">
-      <div className="mx-auto max-w-7xl space-y-6">
-        {/* Header Section */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 p-6 shadow-xl">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 to-indigo-700/90"></div>
-          <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-white/10"></div>
-          <div className="absolute -left-10 -bottom-10 h-32 w-32 rounded-full bg-white/5"></div>
-
-          <div className="relative flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div className="space-y-2">
-              <h1 className="text-2xl font-bold text-white sm:text-3xl">
-                User Management
-              </h1>
-              <p className="text-blue-100">
-                Manage team members and their permissions
-              </p>
+    <div className="p-6 space-y-5">
+      {/* 1. PAGE HEADER */}
+      <div className="flex items-center justify-between">
+        <div>
+          <Title level={2} className="mb-1! flex items-center gap-3">
+            <div
+              className="inline-flex items-center justify-center w-10 h-10 rounded-xl shadow-md"
+              style={{ background: "var(--gradient-primary)" }}
+            >
+              <Users className="w-5 h-5 text-white" />
             </div>
-
-            {/* Stats Cards */}
-            {totalUsers > 0 && (
-              <div className="flex gap-3 flex-wrap">
-                <div className="rounded-2xl bg-white/10 backdrop-blur-sm p-4 text-center min-w-[100px]">
-                  <div className="text-2xl font-bold text-white">
-                    {totalUsers}
-                  </div>
-                  <div className="text-sm font-medium text-blue-100">
-                    Total Users
-                  </div>
-                </div>
-
-                <div className="rounded-2xl bg-white/10 backdrop-blur-sm p-4 text-center min-w-[100px]">
-                  <div className="text-2xl font-bold text-green-300">
-                    {activeUsers}
-                  </div>
-                  <div className="text-sm font-medium text-blue-100">
-                    Active
-                  </div>
-                </div>
-
-                {hasSelectedRows && (
-                  <div className="rounded-2xl bg-white/10 backdrop-blur-sm p-4 text-center min-w-[100px]">
-                    <div className="text-2xl font-bold text-amber-300">
-                      {selectedRowKeys.length}
-                    </div>
-                    <div className="text-sm font-medium text-blue-100">
-                      Selected
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
+            User Management
+          </Title>
+          <Text
+            style={{ color: "var(--color-text-secondary)" }}
+            className="text-sm"
+          >
+            Manage team members and their permissions
+          </Text>
         </div>
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          onClick={handleOpenCreateDrawer}
+          size="large"
+          style={{
+            background: "var(--gradient-primary)",
+            border: "none",
+            boxShadow:
+              "0 4px 12px color-mix(in srgb, var(--color-primary-color) 35%, transparent)",
+          }}
+        >
+          Add New User
+        </Button>
+      </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-sm text-gray-600">Total Users</div>
-                <div className="text-2xl font-bold text-gray-900 mt-1">
-                  {totalUsers}
-                </div>
-              </div>
-              <div className="p-3 bg-blue-50 rounded-2xl">
-                <Users className="w-6 h-6 text-blue-600" />
-              </div>
-            </div>
-          </div>
-
-          <div className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-sm text-gray-600">Active Users</div>
-                <div className="text-2xl font-bold text-green-600 mt-1">
-                  {activeUsers}
-                </div>
-              </div>
-              <div className="p-3 bg-green-50 rounded-2xl">
-                <CheckCircle className="w-6 h-6 text-green-600" />
-              </div>
-            </div>
-          </div>
-
-          <div className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-sm text-gray-600">Managers</div>
-                <div className="text-2xl font-bold text-blue-600 mt-1">
-                  {data?.users?.filter((u) => u.position === "Manager")
-                    .length || 0}
-                </div>
-              </div>
-              <div className="p-3 bg-blue-50 rounded-2xl">
-                <User className="w-6 h-6 text-blue-600" />
-              </div>
-            </div>
-          </div>
-
-          <div className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-sm text-gray-600">Staff</div>
-                <div className="text-2xl font-bold text-indigo-600 mt-1">
-                  {data?.users?.filter((u) => u.position !== "Manager")
-                    .length || 0}
-                </div>
-              </div>
-              <div className="p-3 bg-indigo-50 rounded-2xl">
-                <Briefcase className="w-6 h-6 text-indigo-600" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Filters Section */}
-        {isFilterVisible && (
-          <div className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-gray-200">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Search
-                </label>
-                <Input
-                  placeholder="Search users..."
-                  prefix={<Search className="w-4 h-4 text-gray-400" />}
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className={`rounded-2xl ${isSearching ? "bg-yellow-50 border-yellow-300" : ""}`}
-                />
-                {isSearching && (
-                  <div className="text-xs text-yellow-600 mt-1">
-                    Searching...
-                  </div>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Position
-                </label>
-                <select
-                  value={positionFilter}
-                  onChange={(e) => setPositionFilter(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                >
-                  <option value="">All positions</option>
-                  <option value="Manager">Manager</option>
-                  <option value="Team Lead">Team Lead</option>
-                  <option value="Staff">Staff</option>
-                  <option value="Support">Support</option>
-                  <option value="Administrator">Administrator</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Status
-                </label>
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                >
-                  <option value="">All statuses</option>
-                  <option value="Active">Active</option>
-                  <option value="Inactive">Inactive</option>
-                </select>
-              </div>
-
-              <div className="flex items-end">
-                <Button
-                  onClick={handleClearFilters}
-                  className="rounded-2xl w-full"
-                >
-                  Clear Filters
-                </Button>
-              </div>
-            </div>
-          </div>
+      {/* 2. STAT CARDS */}
+      <Row gutter={[16, 16]}>
+        <Col xs={24} sm={12} lg={6}>
+          <StatCard
+            title="Total Users"
+            value={totalUsers}
+            icon={<Users className="w-5 h-5" />}
+            color="from-primary-color to-secondary-color"
+            bgColor="bg-primary-pale"
+            textColor="text-primary-color"
+          />
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <StatCard
+            title="Active"
+            value={activeUsers}
+            icon={<Users className="w-5 h-5" />}
+            color="from-emerald-400 to-emerald-600"
+            bgColor="bg-emerald-100"
+            textColor="text-emerald-600"
+          />
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <StatCard
+            title="Inactive"
+            value={inactiveUsers}
+            icon={<Users className="w-5 h-5" />}
+            color="from-orange-400 to-orange-600"
+            bgColor="bg-orange-100"
+            textColor="text-orange-600"
+          />
+        </Col>
+        {hasSelectedRows && (
+          <Col xs={24} sm={12} lg={6}>
+            <StatCard
+              title="Selected"
+              value={selectedRowKeys.length}
+              icon={<Users className="w-5 h-5" />}
+              color="from-amber-400 to-amber-600"
+              bgColor="bg-amber-100"
+              textColor="text-amber-600"
+            />
+          </Col>
         )}
+      </Row>
 
-        {/* Action Buttons */}
-        <div className="flex flex-wrap gap-3 items-center">
-          <Button
-            icon={<ReloadOutlined />}
-            onClick={handleRefresh}
-            loading={isLoading}
-            className="rounded-2xl"
-          >
-            Refresh
-          </Button>
-
-          <Button
-            icon={<FilterOutlined />}
-            onClick={() => setIsFilterVisible(!isFilterVisible)}
-            className="rounded-2xl"
-          >
-            Filters
-          </Button>
-
-          {hasSelectedRows && (
-            <Popconfirm
-              title="Delete Selected Users"
-              description={`Are you sure you want to delete ${selectedRowKeys.length} user(s)?`}
-              onConfirm={handleBulkDelete}
-              okText="Delete"
-              okType="danger"
-              cancelText="Cancel"
+      {/* 3. ACTION BAR */}
+      <div className="flex flex-wrap gap-2 items-center">
+        <Button
+          icon={<ReloadOutlined />}
+          onClick={() => refetch?.()}
+          loading={isLoading}
+          size="middle"
+          style={{
+            borderColor: "var(--color-primary-color)",
+            color: "var(--color-primary-color)",
+          }}
+        >
+          Refresh
+        </Button>
+        <Button
+          icon={<FilterOutlined />}
+          onClick={() => setIsFilterVisible(!isFilterVisible)}
+          size="middle"
+          style={
+            isFilterVisible || hasActiveFilters
+              ? {
+                  borderColor: "var(--color-primary-color)",
+                  color: "var(--color-primary-color)",
+                  background: "var(--color-primary-pale)",
+                }
+              : {
+                  borderColor: "var(--color-primary-color)",
+                  color: "var(--color-primary-color)",
+                }
+          }
+        >
+          Filters
+          {hasActiveFilters && (
+            <span
+              className="ml-1.5 inline-flex items-center justify-center w-4 h-4 rounded-full text-white text-[10px] font-bold"
+              style={{ background: "var(--color-primary-color)" }}
             >
-              <Button
-                danger
-                icon={<DeleteOutlined />}
-                loading={isLoading}
-                className="rounded-2xl"
-              >
-                Delete Selected ({selectedRowKeys.length})
-              </Button>
-            </Popconfirm>
+              !
+            </span>
           )}
-
-          <div className="ml-auto">
+        </Button>
+        {hasSelectedRows && (
+          <Popconfirm
+            title="Delete Selected Users"
+            description={`Are you sure you want to delete ${selectedRowKeys.length} user(s)?`}
+            onConfirm={handleBulkDelete}
+            okText="Delete"
+            okType="danger"
+            cancelText="Cancel"
+          >
             <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              onClick={handleOpenCreateDrawer}
-              className="rounded-2xl shadow-md hover:shadow-lg transition-shadow"
-              style={{
-                background: "linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)",
-                border: "none",
-              }}
+              danger
+              icon={<DeleteOutlined />}
+              loading={isLoading}
+              size="middle"
             >
-              Add New User
+              Delete Selected ({selectedRowKeys.length})
             </Button>
-          </div>
-        </div>
+          </Popconfirm>
+        )}
+      </div>
 
-        {/* Main Content - Table */}
-        <div className="rounded-3xl bg-white shadow-lg ring-1 ring-gray-200">
-          {totalUsers === 0 && !isLoading ? (
-            <div className="flex items-center justify-center py-16">
-              <Empty
-                description="No Users Found"
-                style={{ marginTop: 0, marginBottom: 0 }}
-              >
-                <Button
-                  type="primary"
-                  onClick={handleOpenCreateDrawer}
-                  className="mt-6 rounded-2xl"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)",
-                    border: "none",
-                  }}
-                >
-                  Create First User
-                </Button>
-              </Empty>
-            </div>
-          ) : (
-            <div className="p-6">
-              <Table
-                dataSource={data?.users}
-                columns={columns}
-                rowSelection={rowSelection}
-                loading={{
-                  spinning: isLoading,
-                  indicator: (
-                    <Spin
-                      size="large"
-                      tip="Loading users..."
-                      style={{ marginTop: 50 }}
-                    />
-                  ),
-                }}
-                rowKey="accountId"
-                pagination={{
-                  current: currentPage,
-                  pageSize: pageSize,
-                  total: data?.pagination?.total || 0,
-                  showSizeChanger: true,
-                  showQuickJumper: true,
-                  showTotal: (total, range) =>
-                    `${range[0]}–${range[1]} of ${total} users`,
-                  pageSizeOptions: ["10", "20", "50", "100"],
-                  size: "default",
-                  responsive: true,
-                  className: "mt-4",
-                }}
-                onChange={handleTableChange}
-                scroll={{ x: 1400 }}
-                locale={{
-                  emptyText: (
-                    <Empty
-                      description="No data available"
-                      style={{ marginTop: 20 }}
-                    />
-                  ),
-                }}
+      {/* 4. FILTER PANEL */}
+      {isFilterVisible && (
+        <div
+          className="rounded-xl p-4"
+          style={{
+            background:
+              "color-mix(in srgb, var(--color-primary-pale) 50%, white)",
+            border: "1px solid var(--color-primary-pale)",
+          }}
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="sm:col-span-2 lg:col-span-1">
+              <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                Search
+              </label>
+              <Input
+                placeholder="Search users..."
+                prefix={<Search className="w-3.5 h-3.5 text-gray-400" />}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
                 size="middle"
-                className="border-none"
+                className={isSearching ? "bg-yellow-50 border-yellow-300" : ""}
               />
             </div>
-          )}
+            <div>
+              <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                Position
+              </label>
+              <Select
+                value={positionFilter || undefined}
+                onChange={setPositionFilter}
+                placeholder="All positions"
+                allowClear
+                className="w-full"
+                size="middle"
+                options={[
+                  { value: "Manager", label: "Manager" },
+                  { value: "Team Lead", label: "Team Lead" },
+                  { value: "Staff", label: "Staff" },
+                  { value: "Support", label: "Support" },
+                  { value: "Administrator", label: "Administrator" },
+                ]}
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                Status
+              </label>
+              <Select
+                value={statusFilter || undefined}
+                onChange={setStatusFilter}
+                placeholder="All statuses"
+                allowClear
+                className="w-full"
+                size="middle"
+                options={[
+                  { value: "Active", label: "Active" },
+                  { value: "Inactive", label: "Inactive" },
+                ]}
+              />
+            </div>
+            <div className="flex flex-col">
+              <span className="block text-xs font-semibold text-transparent mb-1.5 uppercase tracking-wide select-none">
+                &nbsp;
+              </span>
+              <button
+                onClick={handleClearFilters}
+                className="text-sm hover:underline cursor-pointer transition-colors font-medium h-8 flex items-center"
+                style={{ color: "var(--color-primary-color)" }}
+              >
+                Clear all
+              </button>
+            </div>
+          </div>
         </div>
+      )}
 
-        {/* Create Drawer */}
-        <Drawer
-          title="Create New User"
-          placement="right"
-          onClose={handleCloseCreateDrawer}
-          open={isCreateDrawerOpen}
-          width={500}
-          styles={{ body: { paddingBottom: 80 } }}
-        >
-          <UserForm
-            onSuccess={handleCloseCreateDrawer}
-            onCancel={handleCloseCreateDrawer}
+      {/* 5. TABLE */}
+      <div
+        className="rounded-2xl bg-white ring-1 ring-gray-100 overflow-hidden"
+        style={{
+          boxShadow:
+            "0 4px 6px -1px rgba(0,0,0,0.07), 0 10px 15px -3px rgba(0,0,0,0.07)",
+        }}
+      >
+        {!isLoading && totalUsers === 0 ? (
+          <div className="flex items-center justify-center py-20">
+            <Empty description="No Users Found">
+              <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={handleOpenCreateDrawer}
+                className="mt-4"
+                style={{
+                  background: "var(--gradient-primary)",
+                  border: "none",
+                }}
+              >
+                Add First User
+              </Button>
+            </Empty>
+          </div>
+        ) : (
+          <Table
+            dataSource={data?.users}
+            columns={columns}
+            rowSelection={rowSelection}
+            loading={{
+              spinning: isLoading,
+              indicator: <Spin size="large" style={{ marginTop: 50 }} />,
+            }}
+            rowKey="accountId"
+            pagination={{
+              current: currentPage,
+              pageSize: pageSize,
+              total: data?.pagination?.total || 0,
+              showSizeChanger: true,
+              showQuickJumper: true,
+              showTotal: (total, range) =>
+                `${range[0]}–${range[1]} of ${total} users`,
+              pageSizeOptions: ["10", "20", "50", "100"],
+              size: "default",
+              responsive: true,
+              className: "px-6 py-3",
+            }}
+            onChange={handleTableChange}
+            scroll={{ x: 1400 }}
+            size="middle"
+            className="border-none"
+            rowClassName="hover:bg-primary-pale/30 transition-colors"
           />
-        </Drawer>
-
-        {/* Edit Drawer */}
-        <Drawer
-          title="Edit User"
-          placement="right"
-          onClose={handleCloseEditDrawer}
-          open={!!editingUser}
-          width={500}
-          styles={{ body: { paddingBottom: 80 } }}
-        >
-          <UserForm
-            user={editingUser}
-            onSuccess={handleCloseEditDrawer}
-            onCancel={handleCloseEditDrawer}
-          />
-        </Drawer>
-
-        {/* View Modal */}
-        <UserViewModal
-          open={isViewModalVisible}
-          onClose={handleViewModalCancel}
-          user={viewingUser}
-        />
-
-        {/* Permissions Drawer */}
-        <Drawer
-          title="Manage User Permissions"
-          placement="right"
-          onClose={handleClosePermissionsDrawer}
-          open={isPermissionsDrawerOpen}
-          width={1000}
-          styles={{ body: { padding: 0 } }}
-        >
-          <UserPermissionsDrawer
-            user={permissionsUser}
-            onClose={handleClosePermissionsDrawer}
-          />
-        </Drawer>
+        )}
       </div>
+
+      {/* 6. DRAWERS & MODALS */}
+      <Drawer
+        title={
+          <div className="flex items-center gap-3">
+            <div
+              className="p-2.5 rounded-xl"
+              style={{ background: "var(--gradient-primary)" }}
+            >
+              <Users className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h2
+                className="text-lg font-bold"
+                style={{ color: "var(--color-text-dark)" }}
+              >
+                Add New User
+              </h2>
+              <p
+                className="text-sm"
+                style={{ color: "var(--color-text-secondary)" }}
+              >
+                Create a new team member account
+              </p>
+            </div>
+          </div>
+        }
+        placement="right"
+        onClose={handleCloseCreateDrawer}
+        open={isCreateDrawerOpen}
+        width={720}
+        styles={{ body: { paddingBottom: 0 } }}
+        footer={null}
+      >
+        <UserForm
+          onSuccess={handleCloseCreateDrawer}
+          onCancel={handleCloseCreateDrawer}
+        />
+      </Drawer>
+
+      <Drawer
+        title={
+          <div className="flex items-center gap-3">
+            <div
+              className="p-2.5 rounded-xl"
+              style={{ background: "var(--gradient-primary)" }}
+            >
+              <Users className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h2
+                className="text-lg font-bold"
+                style={{ color: "var(--color-text-dark)" }}
+              >
+                Edit User
+              </h2>
+              <p
+                className="text-sm"
+                style={{ color: "var(--color-text-secondary)" }}
+              >
+                Update user account information
+              </p>
+            </div>
+          </div>
+        }
+        placement="right"
+        onClose={handleCloseEditDrawer}
+        open={!!editingUser}
+        width={720}
+        styles={{ body: { paddingBottom: 0 } }}
+        footer={null}
+      >
+        <UserForm
+          user={editingUser}
+          onSuccess={handleCloseEditDrawer}
+          onCancel={handleCloseEditDrawer}
+        />
+      </Drawer>
+
+      <UserViewModal
+        open={isViewModalVisible}
+        onClose={handleViewModalCancel}
+        user={viewingUser}
+      />
+
+      <Drawer
+        title={
+          <div className="flex items-center gap-3">
+            <div
+              className="p-2.5 rounded-xl"
+              style={{ background: "var(--gradient-primary)" }}
+            >
+              <Users className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h2
+                className="text-lg font-bold"
+                style={{ color: "var(--color-text-dark)" }}
+              >
+                Manage Permissions
+              </h2>
+              <p
+                className="text-sm"
+                style={{ color: "var(--color-text-secondary)" }}
+              >
+                Configure user access levels
+              </p>
+            </div>
+          </div>
+        }
+        placement="right"
+        onClose={handleClosePermissionsDrawer}
+        open={isPermissionsDrawerOpen}
+        width={1000}
+        styles={{ body: { padding: 0 } }}
+        footer={null}
+      >
+        <UserPermissionsDrawer
+          user={permissionsUser}
+          onClose={handleClosePermissionsDrawer}
+        />
+      </Drawer>
     </div>
   );
 };

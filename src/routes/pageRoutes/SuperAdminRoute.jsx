@@ -12,6 +12,7 @@ const Dashboard = lazy(() => import("../../pages/SuperAdmin/Dashboard"));
 const Organizations = lazy(
   () => import("../../pages/SuperAdmin/Organizations"),
 );
+const AccountSettings = lazy(() => import("../../pages/Admin/AccountSettings"));
 
 const SuperAdminRoute = () => {
   // ========== Navigation Configuration ==========
@@ -125,6 +126,14 @@ const SuperAdminRoute = () => {
             })}
 
           {/* Fallback Route */}
+          <Route
+            path="account-settings"
+            element={
+              <Suspense fallback={<ComponentLoader />}>
+                <AccountSettings />
+              </Suspense>
+            }
+          />
           <Route path="*" element={<div>Page Not Found</div>} />
         </Route>
       </Route>

@@ -10,11 +10,11 @@ import {
   Alert,
 } from "antd";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getPermissions } from "../../../../services/api/admin/permissions";
+import { getPermissions } from "../../../../../services/api/admin/permissions";
 import {
   getRolePermissions,
   assignPermissions,
-} from "../../../../services/api/admin/roles";
+} from "../../../../../services/api/admin/roles";
 
 const { Panel } = Collapse;
 

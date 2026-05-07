@@ -17,7 +17,7 @@ export const ProtectedRoute = ({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <Spin size="large" tip="Loading permissions..." />
+        <Spin size="large" fullscreen tip="Loading permissions..." />
       </div>
     );
   }

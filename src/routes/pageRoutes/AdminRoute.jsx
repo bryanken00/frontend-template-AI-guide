@@ -11,6 +11,7 @@ const Login = lazy(() => import("../../pages/Admin/Login"));
 const Dashboard = lazy(() => import("../../pages/Admin/Dashboard"));
 const Users = lazy(() => import("../../pages/Admin/UserManagement/Users"));
 const Roles = lazy(() => import("../../pages/Admin/UserManagement/Roles"));
+const AccountSettings = lazy(() => import("../../pages/Admin/AccountSettings"));
 
 const AdminRoute = () => {
   const navigations = [
@@ -35,7 +36,13 @@ const AdminRoute = () => {
       name: "User Management",
       label: "User Management",
       icon: <UserOutlined className="h-5 w-5" />,
-      permission: { module: "users", submodule: null, accessLevel: "read" },
+      permission: {
+        anyOf: [
+          { module: "users", submodule: "list", accessLevel: "read" },
+          { module: "users", submodule: "roles", accessLevel: "read" },
+          { module: "users", submodule: "positions", accessLevel: "read" },
+        ],
+      },
       isFilter: true,
       isShow: true,
       children: [
@@ -153,7 +160,24 @@ const AdminRoute = () => {
               );
             })}
 
+          <Route
+            path="account-settings"
+            element={
+              <Suspense fallback={<ComponentLoader />}>
+                <AccountSettings />
+              </Suspense>
+            }
+          />
+
           <Route path="*" element={<div>Page Not Found</div>} />
+          <Route
+            path="account-settings"
+            element={
+              <Suspense fallback={<ComponentLoader />}>
+                <AccountSettings />
+              </Suspense>
+            }
+          />
         </Route>
       </Route>
     </Routes>

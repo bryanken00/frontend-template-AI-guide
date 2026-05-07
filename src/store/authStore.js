@@ -7,12 +7,20 @@ export const useAdminAuthStore = create(
     (set) => ({
       userData: null,
       token: null,
+      organization: null,
       permissions: [],
       setToken: (token) => set({ token }),
       setUserData: (userData) => set({ userData }),
       setUser: (userData) => set({ userData }), // Alias for compatibility
+      setOrganization: (organization) => set({ organization }),
       setPermissions: (permissions) => set({ permissions }),
-      reset: () => set({ userData: null, token: null, permissions: [] }),
+      reset: () =>
+        set({
+          userData: null,
+          token: null,
+          organization: null,
+          permissions: [],
+        }),
     }),
     {
       name: "admin-auth",

@@ -10,22 +10,25 @@ import {
 import {
   useCreateOrganization,
   useUpdateOrganization,
-} from "../../../services/requests/superadmin/organizations";
+} from "../../../../services/requests/superadmin/organizations";
 import {
   refregion,
   refprovince,
   refcitymun,
   refbrgy,
-} from "../../../assets/address";
+} from "../../../../assets/address";
 import {
   getProvincesByRegion,
   getCitiesByProvince,
   getBarangaysByCity,
-} from "../../../utils/address";
-import { formatPhoneNumber, phoneValidator } from "../../../utils/phoneFormat";
-import { validationRules } from "../../../utils/validation";
-import PasswordStrengthIndicator from "../../../components/PasswordStrengthIndicator";
-import { getImageUrl } from "../../../utils/upload";
+} from "../../../../utils/address";
+import {
+  formatPhoneNumber,
+  phoneValidator,
+} from "../../../../utils/phoneFormat";
+import { validationRules } from "../../../../utils/validation";
+import PasswordStrengthIndicator from "../../../../components/PasswordStrengthIndicator";
+import { getImageUrl } from "../../../../utils/upload";
 
 const { TextArea } = Input;
 const { Option } = Select;

@@ -1,7 +1,10 @@
 import { useEffect } from "react";
 import { Form, Input, Select, Button, Space, message } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createRole, updateRole } from "../../../../services/api/admin/roles";
+import {
+  createRole,
+  updateRole,
+} from "../../../../../services/api/admin/roles";
 
 const { TextArea } = Input;
 

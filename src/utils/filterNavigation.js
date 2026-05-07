@@ -10,9 +10,16 @@ export const filterNavigationByPermissions = (navigation, hasPermission) => {
       // If no permission required, show item
       if (!item.permission) return true;
 
-      const { module, submodule, accessLevel } = item.permission;
+      // Handle anyOf permission structure (for parent modules with multiple submodules)
+      if (item.permission.anyOf) {
+        return item.permission.anyOf.some(
+          ({ module, submodule, accessLevel }) =>
+            hasPermission(module, submodule, accessLevel),
+        );
+      }
 
-      // Check if user has required permission
+      // Handle single permission structure
+      const { module, submodule, accessLevel } = item.permission;
       return hasPermission(module, submodule, accessLevel);
     })
     .map((item) => {

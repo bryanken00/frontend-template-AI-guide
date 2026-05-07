@@ -1,14 +1,4 @@
-import {
-  Card,
-  Col,
-  Row,
-  Statistic,
-  Typography,
-  Table,
-  Tag,
-  Avatar,
-  Progress,
-} from "antd";
+import { Card, Col, Row, Table, Tag, Avatar, Progress, Typography } from "antd";
 import {
   Users,
   Building2,
@@ -26,44 +16,45 @@ import {
   Settings,
   CreditCard,
 } from "lucide-react";
+import StatCard from "../../../components/StatCard";
 
 const { Title, Text } = Typography;
 
 const Dashboard = () => {
-  const stats = [
+  const statCards = [
     {
       title: "Total Organizations",
       value: 48,
-      icon: <Building2 className="w-6 h-6" />,
-      color: "from-blue-500 to-blue-600",
-      bgColor: "bg-blue-50",
-      textColor: "text-blue-600",
+      icon: <Building2 className="w-5 h-5" />,
+      color: "from-primary-color to-secondary-color",
+      bgColor: "bg-primary-pale",
+      textColor: "text-primary-color",
       change: "+8 this month",
     },
     {
       title: "Active Organizations",
       value: 45,
-      icon: <CheckCircle className="w-6 h-6" />,
-      color: "from-purple-500 to-purple-600",
-      bgColor: "bg-purple-50",
-      textColor: "text-purple-600",
+      icon: <CheckCircle className="w-5 h-5" />,
+      color: "from-emerald-400 to-emerald-600",
+      bgColor: "bg-emerald-100",
+      textColor: "text-emerald-600",
       change: "93.8% active rate",
     },
     {
       title: "Total Branches",
       value: 156,
-      icon: <MapPin className="w-6 h-6" />,
-      color: "from-green-500 to-green-600",
-      bgColor: "bg-green-50",
-      textColor: "text-green-600",
+      icon: <MapPin className="w-5 h-5" />,
+      color: "from-secondary-color to-secondary-dark",
+      bgColor: "bg-secondary-pale",
+      textColor: "text-secondary-color",
       change: "+12 this month",
     },
     {
       title: "Monthly Revenue",
       value: "$24K",
-      icon: <TrendingUp className="w-6 h-6" />,
-      color: "from-orange-500 to-orange-600",
-      bgColor: "bg-orange-50",
+      icon: <TrendingUp className="w-5 h-5" />,
+      color: "from-orange-400 to-orange-600",
+      bgColor: "bg-orange-100",
       textColor: "text-orange-600",
       change: "+12.5% growth",
     },
@@ -104,7 +95,6 @@ const Dashboard = () => {
       branches: 5,
       status: "active",
       subscription: "Premium",
-      createdAt: "2024-01-15",
     },
     {
       key: "2",
@@ -113,7 +103,6 @@ const Dashboard = () => {
       branches: 3,
       status: "active",
       subscription: "Standard",
-      createdAt: "2024-02-20",
     },
     {
       key: "3",
@@ -122,7 +111,6 @@ const Dashboard = () => {
       branches: 8,
       status: "active",
       subscription: "Enterprise",
-      createdAt: "2023-11-10",
     },
     {
       key: "4",
@@ -131,7 +119,6 @@ const Dashboard = () => {
       branches: 2,
       status: "inactive",
       subscription: "Basic",
-      createdAt: "2024-03-05",
     },
   ];
 
@@ -140,7 +127,6 @@ const Dashboard = () => {
       id: 1,
       type: "organization",
       icon: <Building2 className="w-4 h-4" />,
-      color: "blue",
       title: "New organization registered",
       description: "Acme Corporation joined the platform",
       time: "5 minutes ago",
@@ -149,7 +135,6 @@ const Dashboard = () => {
       id: 2,
       type: "user",
       icon: <UserPlus className="w-4 h-4" />,
-      color: "green",
       title: "New admin user created",
       description: "John Smith added to TechStart Inc.",
       time: "15 minutes ago",
@@ -158,7 +143,6 @@ const Dashboard = () => {
       id: 3,
       type: "subscription",
       icon: <CreditCard className="w-4 h-4" />,
-      color: "purple",
       title: "Subscription upgraded",
       description: "Global Services upgraded to Enterprise plan",
       time: "1 hour ago",
@@ -167,7 +151,6 @@ const Dashboard = () => {
       id: 4,
       type: "document",
       icon: <FileText className="w-4 h-4" />,
-      color: "orange",
       title: "Document submitted",
       description: "StartUp Hub submitted compliance documents",
       time: "2 hours ago",
@@ -176,7 +159,6 @@ const Dashboard = () => {
       id: 5,
       type: "system",
       icon: <Settings className="w-4 h-4" />,
-      color: "gray",
       title: "System maintenance completed",
       description: "Database optimization finished successfully",
       time: "3 hours ago",
@@ -184,10 +166,30 @@ const Dashboard = () => {
   ];
 
   const subscriptionData = [
-    { plan: "Basic", count: 8, color: "#d1d5db", revenue: "$12K" },
-    { plan: "Standard", count: 15, color: "#3b82f6", revenue: "$45K" },
-    { plan: "Premium", count: 18, color: "#a855f7", revenue: "$108K" },
-    { plan: "Enterprise", count: 7, color: "#f59e0b", revenue: "$77K" },
+    {
+      plan: "Basic",
+      count: 8,
+      color: "var(--color-text-muted)",
+      revenue: "$12K",
+    },
+    {
+      plan: "Standard",
+      count: 15,
+      color: "var(--color-primary-color)",
+      revenue: "$45K",
+    },
+    {
+      plan: "Premium",
+      count: 18,
+      color: "var(--color-secondary-color)",
+      revenue: "$108K",
+    },
+    {
+      plan: "Enterprise",
+      count: 7,
+      color: "var(--color-warning)",
+      revenue: "$77K",
+    },
   ];
 
   const organizationColumns = [
@@ -200,11 +202,11 @@ const Dashboard = () => {
           <Avatar
             size={32}
             icon={<Building2 className="w-4 h-4" />}
-            className="bg-blue-100 text-blue-600"
+            className="bg-primary-pale text-primary-color"
           />
           <div>
-            <div className="font-medium text-gray-900">{text}</div>
-            <div className="text-xs text-gray-500 flex items-center gap-1">
+            <div className="font-semibold text-text-dark">{text}</div>
+            <div className="text-xs text-text-secondary flex items-center gap-1">
               <MapPin className="w-3 h-3" />
               {record.city}
             </div>
@@ -247,9 +249,9 @@ const Dashboard = () => {
 
   const getActivityColor = (type) => {
     const colors = {
-      organization: "bg-blue-100 text-blue-600",
-      user: "bg-green-100 text-green-600",
-      subscription: "bg-purple-100 text-purple-600",
+      organization: "bg-primary-pale text-primary-color",
+      user: "bg-emerald-100 text-emerald-600",
+      subscription: "bg-secondary-pale text-secondary-color",
       document: "bg-orange-100 text-orange-600",
       system: "bg-gray-100 text-gray-600",
     };
@@ -257,66 +259,42 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Header */}
+    <div className="p-6 space-y-5">
+      {/* 1. PAGE HEADER */}
       <div className="flex items-center justify-between">
         <div>
-          <Title level={2} className="mb-2! flex items-center gap-3">
-            <div className="inline-flex items-center justify-center w-12 h-12 bg-linear-to-br from-purple-500 to-pink-600 rounded-2xl shadow-lg">
-              <ShieldCheck className="w-6 h-6 text-white" />
+          <Title level={2} className="mb-1! flex items-center gap-3">
+            <div
+              className="inline-flex items-center justify-center w-10 h-10 rounded-xl shadow-md"
+              style={{ background: "var(--gradient-primary)" }}
+            >
+              <ShieldCheck className="w-5 h-5 text-white" />
             </div>
             SuperAdmin Dashboard
           </Title>
-          <Text className="text-gray-600">
+          <Text
+            style={{ color: "var(--color-text-secondary)" }}
+            className="text-sm"
+          >
             System overview and management console
           </Text>
         </div>
       </div>
 
-      {/* Main Stats */}
+      {/* 2. STAT CARDS */}
       <Row gutter={[16, 16]}>
-        {stats.map((stat, index) => (
+        {statCards.map((stat, index) => (
           <Col xs={24} sm={12} lg={6} key={index}>
-            <Card
-              className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-              style={{
-                background: "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)",
-              }}
-            >
-              <div className="flex items-center justify-between mb-3">
-                <div>
-                  <Text className="text-gray-600 text-sm block mb-2">
-                    {stat.title}
-                  </Text>
-                  <Statistic
-                    value={stat.value}
-                    valueStyle={{
-                      fontSize: "28px",
-                      fontWeight: "bold",
-                      color: "#1f2937",
-                    }}
-                  />
-                </div>
-                <div
-                  className={`${stat.bgColor} ${stat.textColor} p-4 rounded-2xl`}
-                >
-                  {stat.icon}
-                </div>
-              </div>
-              <Text className="text-xs text-gray-500">{stat.change}</Text>
-              <div
-                className={`absolute bottom-0 left-0 right-0 h-1 bg-linear-to-r ${stat.color}`}
-              ></div>
-            </Card>
+            <StatCard {...stat} />
           </Col>
         ))}
       </Row>
 
-      {/* System Status */}
+      {/* 3. SYSTEM STATUS */}
       <Card
         title={
           <div className="flex items-center gap-2">
-            <Activity className="w-5 h-5 text-purple-600" />
+            <Activity className="w-5 h-5 text-primary-color" />
             <span>System Status</span>
           </div>
         }
@@ -329,14 +307,17 @@ const Dashboard = () => {
                 <div
                   className={`p-3 rounded-xl ${
                     stat.status === "success"
-                      ? "bg-green-100 text-green-600"
+                      ? "bg-emerald-100 text-emerald-600"
                       : "bg-orange-100 text-orange-600"
                   }`}
                 >
                   {stat.icon}
                 </div>
                 <div>
-                  <Text className="text-gray-600 text-sm block">
+                  <Text
+                    style={{ color: "var(--color-text-secondary)" }}
+                    className="text-sm block"
+                  >
                     {stat.title}
                   </Text>
                   <Text className="text-lg font-semibold">{stat.value}</Text>
@@ -347,19 +328,22 @@ const Dashboard = () => {
         </Row>
       </Card>
 
-      {/* Recent Organizations & Subscription Overview */}
+      {/* 4. RECENT ORGANIZATIONS & SUBSCRIPTION */}
       <Row gutter={[16, 16]}>
         <Col xs={24} lg={16}>
           <Card
             title={
               <div className="flex items-center gap-2">
-                <Building2 className="w-5 h-5 text-blue-600" />
+                <Building2 className="w-5 h-5 text-primary-color" />
                 <span>Recent Organizations</span>
               </div>
             }
             className="shadow-lg border-0"
             extra={
-              <Text className="text-blue-600 cursor-pointer hover:underline">
+              <Text
+                className="cursor-pointer hover:underline"
+                style={{ color: "var(--color-primary-color)" }}
+              >
                 View All
               </Text>
             }
@@ -377,7 +361,7 @@ const Dashboard = () => {
           <Card
             title={
               <div className="flex items-center gap-2">
-                <CreditCard className="w-5 h-5 text-purple-600" />
+                <CreditCard className="w-5 h-5 text-secondary-color" />
                 <span>Subscription Overview</span>
               </div>
             }
@@ -394,7 +378,7 @@ const Dashboard = () => {
                       ></div>
                       <Text className="font-medium">{sub.plan}</Text>
                     </div>
-                    <Text className="text-gray-600">
+                    <Text style={{ color: "var(--color-text-secondary)" }}>
                       {sub.count} organizations
                     </Text>
                   </div>
@@ -404,13 +388,18 @@ const Dashboard = () => {
                     showInfo={false}
                     size="small"
                   />
-                  <Text className="text-xs text-gray-500">{sub.revenue}</Text>
+                  <Text
+                    style={{ color: "var(--color-text-muted)" }}
+                    className="text-xs"
+                  >
+                    {sub.revenue}
+                  </Text>
                 </div>
               ))}
               <div className="pt-4 mt-4 border-t border-gray-200">
                 <div className="flex items-center justify-between">
                   <Text className="font-semibold">Total Revenue</Text>
-                  <Text className="text-lg font-bold text-purple-600">
+                  <Text className="text-lg font-bold text-secondary-color">
                     $242K
                   </Text>
                 </div>
@@ -420,19 +409,22 @@ const Dashboard = () => {
         </Col>
       </Row>
 
-      {/* Recent Activity & System Alerts */}
+      {/* 5. RECENT ACTIVITY & ALERTS */}
       <Row gutter={[16, 16]}>
         <Col xs={24} lg={16}>
           <Card
             title={
               <div className="flex items-center gap-2">
-                <Clock className="w-5 h-5 text-green-600" />
+                <Clock className="w-5 h-5 text-emerald-600" />
                 <span>Recent Activity</span>
               </div>
             }
             className="shadow-lg border-0 h-full"
             extra={
-              <Text className="text-blue-600 cursor-pointer hover:underline">
+              <Text
+                className="cursor-pointer hover:underline"
+                style={{ color: "var(--color-primary-color)" }}
+              >
                 View All
               </Text>
             }
@@ -449,13 +441,13 @@ const Dashboard = () => {
                     {activity.icon}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <Text className="block font-medium text-gray-900">
+                    <Text className="block font-medium text-text-dark">
                       {activity.title}
                     </Text>
-                    <Text className="text-sm text-gray-600 block truncate">
+                    <Text className="text-sm text-text-secondary block truncate">
                       {activity.description}
                     </Text>
-                    <Text className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                    <Text className="text-xs text-text-muted mt-1 flex items-center gap-1">
                       <Clock className="w-3 h-3" />
                       {activity.time}
                     </Text>
@@ -476,7 +468,10 @@ const Dashboard = () => {
             }
             className="shadow-lg border-0 h-full"
             extra={
-              <Text className="text-blue-600 cursor-pointer hover:underline">
+              <Text
+                className="cursor-pointer hover:underline"
+                style={{ color: "var(--color-primary-color)" }}
+              >
                 View All
               </Text>
             }
@@ -485,43 +480,43 @@ const Dashboard = () => {
               <div className="flex items-start gap-3 p-3 bg-orange-50 rounded-xl border border-orange-200">
                 <AlertCircle className="w-5 h-5 text-orange-600 shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <Text className="block font-medium text-gray-900">
+                  <Text className="block font-medium text-text-dark">
                     Payment Pending
                   </Text>
-                  <Text className="text-sm text-gray-600">
+                  <Text className="text-sm text-text-secondary">
                     2 organizations have pending subscription payments
                   </Text>
-                  <Text className="text-xs text-gray-500 mt-1">
+                  <Text className="text-xs text-text-muted mt-1">
                     Requires attention
                   </Text>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3 bg-yellow-50 rounded-xl border border-yellow-200">
-                <AlertCircle className="w-5 h-5 text-yellow-600 shrink-0 mt-0.5" />
+              <div className="flex items-start gap-3 p-3 bg-amber-50 rounded-xl border border-amber-200">
+                <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <Text className="block font-medium text-gray-900">
+                  <Text className="block font-medium text-text-dark">
                     Document Verification
                   </Text>
-                  <Text className="text-sm text-gray-600">
+                  <Text className="text-sm text-text-secondary">
                     3 organizations awaiting document verification
                   </Text>
-                  <Text className="text-xs text-gray-500 mt-1">
+                  <Text className="text-xs text-text-muted mt-1">
                     Review required
                   </Text>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3 bg-blue-50 rounded-xl border border-blue-200">
-                <Activity className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+              <div className="flex items-start gap-3 p-3 bg-primary-pale rounded-xl border border-primary-pale">
+                <Activity className="w-5 h-5 text-primary-color shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <Text className="block font-medium text-gray-900">
+                  <Text className="block font-medium text-text-dark">
                     System Update Available
                   </Text>
-                  <Text className="text-sm text-gray-600">
+                  <Text className="text-sm text-text-secondary">
                     New version 2.5.0 is ready to install
                   </Text>
-                  <Text className="text-xs text-gray-500 mt-1">
+                  <Text className="text-xs text-text-muted mt-1">
                     Optional update
                   </Text>
                 </div>
