@@ -32,7 +32,7 @@ const { Title, Text } = Typography;
 const Dashboard = () => {
   const stats = [
     {
-      title: "Total Clinics",
+      title: "Total Organizations",
       value: 48,
       icon: <Building2 className="w-6 h-6" />,
       color: "from-blue-500 to-blue-600",
@@ -41,7 +41,7 @@ const Dashboard = () => {
       change: "+8 this month",
     },
     {
-      title: "Active Clinics",
+      title: "Active Organizations",
       value: 45,
       icon: <CheckCircle className="w-6 h-6" />,
       color: "from-purple-500 to-purple-600",
@@ -60,7 +60,7 @@ const Dashboard = () => {
     },
     {
       title: "Monthly Revenue",
-      value: "₱2.4M",
+      value: "$24K",
       icon: <TrendingUp className="w-6 h-6" />,
       color: "from-orange-500 to-orange-600",
       bgColor: "bg-orange-50",
@@ -96,11 +96,11 @@ const Dashboard = () => {
     },
   ];
 
-  const recentClinics = [
+  const recentOrganizations = [
     {
       key: "1",
-      name: "GoodHeart Medical Center",
-      city: "Manila",
+      name: "Acme Corporation",
+      city: "New York",
       branches: 5,
       status: "active",
       subscription: "Premium",
@@ -108,8 +108,8 @@ const Dashboard = () => {
     },
     {
       key: "2",
-      name: "HealthPlus Clinic",
-      city: "Quezon City",
+      name: "TechStart Inc.",
+      city: "San Francisco",
       branches: 3,
       status: "active",
       subscription: "Standard",
@@ -117,8 +117,8 @@ const Dashboard = () => {
     },
     {
       key: "3",
-      name: "MediCare Hospital",
-      city: "Makati",
+      name: "Global Services Ltd.",
+      city: "Chicago",
       branches: 8,
       status: "active",
       subscription: "Enterprise",
@@ -126,8 +126,8 @@ const Dashboard = () => {
     },
     {
       key: "4",
-      name: "Wellness Center",
-      city: "Pasig",
+      name: "StartUp Hub",
+      city: "Austin",
       branches: 2,
       status: "inactive",
       subscription: "Basic",
@@ -138,11 +138,11 @@ const Dashboard = () => {
   const recentActivities = [
     {
       id: 1,
-      type: "clinic",
+      type: "organization",
       icon: <Building2 className="w-4 h-4" />,
       color: "blue",
-      title: "New clinic registered",
-      description: "GoodHeart Medical Center joined the platform",
+      title: "New organization registered",
+      description: "Acme Corporation joined the platform",
       time: "5 minutes ago",
     },
     {
@@ -151,7 +151,7 @@ const Dashboard = () => {
       icon: <UserPlus className="w-4 h-4" />,
       color: "green",
       title: "New admin user created",
-      description: "Dr. Maria Santos added to HealthPlus Clinic",
+      description: "John Smith added to TechStart Inc.",
       time: "15 minutes ago",
     },
     {
@@ -160,7 +160,7 @@ const Dashboard = () => {
       icon: <CreditCard className="w-4 h-4" />,
       color: "purple",
       title: "Subscription upgraded",
-      description: "MediCare Hospital upgraded to Enterprise plan",
+      description: "Global Services upgraded to Enterprise plan",
       time: "1 hour ago",
     },
     {
@@ -169,7 +169,7 @@ const Dashboard = () => {
       icon: <FileText className="w-4 h-4" />,
       color: "orange",
       title: "Document submitted",
-      description: "Wellness Center submitted compliance documents",
+      description: "StartUp Hub submitted compliance documents",
       time: "2 hours ago",
     },
     {
@@ -184,15 +184,15 @@ const Dashboard = () => {
   ];
 
   const subscriptionData = [
-    { plan: "Basic", count: 8, color: "#d1d5db", revenue: "₱120K" },
-    { plan: "Standard", count: 15, color: "#3b82f6", revenue: "₱450K" },
-    { plan: "Premium", count: 18, color: "#a855f7", revenue: "₱1.08M" },
-    { plan: "Enterprise", count: 7, color: "#f59e0b", revenue: "₱770K" },
+    { plan: "Basic", count: 8, color: "#d1d5db", revenue: "$12K" },
+    { plan: "Standard", count: 15, color: "#3b82f6", revenue: "$45K" },
+    { plan: "Premium", count: 18, color: "#a855f7", revenue: "$108K" },
+    { plan: "Enterprise", count: 7, color: "#f59e0b", revenue: "$77K" },
   ];
 
-  const clinicColumns = [
+  const organizationColumns = [
     {
-      title: "Clinic Name",
+      title: "Organization",
       dataIndex: "name",
       key: "name",
       render: (text, record) => (
@@ -247,7 +247,7 @@ const Dashboard = () => {
 
   const getActivityColor = (type) => {
     const colors = {
-      clinic: "bg-blue-100 text-blue-600",
+      organization: "bg-blue-100 text-blue-600",
       user: "bg-green-100 text-green-600",
       subscription: "bg-purple-100 text-purple-600",
       document: "bg-orange-100 text-orange-600",
@@ -347,14 +347,14 @@ const Dashboard = () => {
         </Row>
       </Card>
 
-      {/* Recent Clinics & Subscription Overview */}
+      {/* Recent Organizations & Subscription Overview */}
       <Row gutter={[16, 16]}>
         <Col xs={24} lg={16}>
           <Card
             title={
               <div className="flex items-center gap-2">
                 <Building2 className="w-5 h-5 text-blue-600" />
-                <span>Recent Clinics</span>
+                <span>Recent Organizations</span>
               </div>
             }
             className="shadow-lg border-0"
@@ -365,8 +365,8 @@ const Dashboard = () => {
             }
           >
             <Table
-              columns={clinicColumns}
-              dataSource={recentClinics}
+              columns={organizationColumns}
+              dataSource={recentOrganizations}
               pagination={false}
               size="small"
             />
@@ -394,7 +394,9 @@ const Dashboard = () => {
                       ></div>
                       <Text className="font-medium">{sub.plan}</Text>
                     </div>
-                    <Text className="text-gray-600">{sub.count} clinics</Text>
+                    <Text className="text-gray-600">
+                      {sub.count} organizations
+                    </Text>
                   </div>
                   <Progress
                     percent={(sub.count / 48) * 100}
@@ -409,7 +411,7 @@ const Dashboard = () => {
                 <div className="flex items-center justify-between">
                   <Text className="font-semibold">Total Revenue</Text>
                   <Text className="text-lg font-bold text-purple-600">
-                    ₱2.42M
+                    $242K
                   </Text>
                 </div>
               </div>
@@ -487,7 +489,7 @@ const Dashboard = () => {
                     Payment Pending
                   </Text>
                   <Text className="text-sm text-gray-600">
-                    2 clinics have pending subscription payments
+                    2 organizations have pending subscription payments
                   </Text>
                   <Text className="text-xs text-gray-500 mt-1">
                     Requires attention
@@ -502,7 +504,7 @@ const Dashboard = () => {
                     Document Verification
                   </Text>
                   <Text className="text-sm text-gray-600">
-                    3 clinics awaiting document verification
+                    3 organizations awaiting document verification
                   </Text>
                   <Text className="text-xs text-gray-500 mt-1">
                     Review required

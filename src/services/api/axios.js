@@ -90,9 +90,7 @@ axiosInstance.interceptors.response.use(
 
       try {
         // Fetch new CSRF token
-        const response = await axiosInstance.get(
-          "/api/v1/admin/auth/csrf-token",
-        );
+        const response = await axiosInstance.get("/api/v1/auth/csrf-token");
         const newCsrfToken = response.data.csrfToken;
 
         // Update the store with the new token
@@ -190,10 +188,11 @@ export const createAxiosInstanceWithInterceptor = (
         originalRequest._retry = true;
 
         try {
-          // Fetch new CSRF token
-          const response = await axiosInstance.get(
-            "/api/v1/admin/auth/csrf-token",
-          );
+          // Fetch new CSRF token using the appropriate user type endpoint
+          const csrfEndpoint = user
+            ? `/api/v1/${user}/auth/csrf-token`
+            : "/api/v1/auth/csrf-token";
+          const response = await axiosInstance.get(csrfEndpoint);
           const newCsrfToken = response.data.csrfToken;
 
           // Update the store with the new token

@@ -9,7 +9,9 @@ import { Auth, UnAuth } from "../ValidateAuth";
 
 const Login = lazy(() => import("../../pages/SuperAdmin/Login"));
 const Dashboard = lazy(() => import("../../pages/SuperAdmin/Dashboard"));
-const Clinics = lazy(() => import("../../pages/SuperAdmin/Clinics"));
+const Organizations = lazy(
+  () => import("../../pages/SuperAdmin/Organizations"),
+);
 
 const SuperAdminRoute = () => {
   // ========== Navigation Configuration ==========
@@ -28,13 +30,13 @@ const SuperAdminRoute = () => {
       isShow: true,
     },
     {
-      route: "/clinics",
-      name: "Clinics",
-      label: "Clinic Management",
+      route: "/organizations",
+      name: "Organizations",
+      label: "Organization Management",
       icon: <Building2 className="h-5 w-5" />,
       component: (
         <Suspense fallback={<ComponentLoader />}>
-          <Clinics />
+          <Organizations />
         </Suspense>
       ),
       isFilter: true,

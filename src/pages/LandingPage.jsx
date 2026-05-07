@@ -20,7 +20,7 @@ const LandingPage = () => {
           className="text-xl mb-8"
           style={{ color: "var(--color-text-secondary)" }}
         >
-          Modern clinic management solution
+          Your modern web application
         </p>
         <Button type="primary" size="large" onClick={() => navigate("/admin")}>
           Admin Login

@@ -16,11 +16,11 @@ import {
   DeleteOutlined,
 } from "@ant-design/icons";
 import { Search, Building2, MapPin, Users, CheckCircle } from "lucide-react";
-import { useClinicHooks } from "./hooks";
-import ClinicForm from "./ClinicForm";
-import { ViewClinicModal } from "./components";
+import { useOrganizationHooks } from "./hooks";
+import OrganizationForm from "./OrganizationForm";
+import { ViewOrganizationModal } from "./components";
 
-const Clinics = () => {
+const Organizations = () => {
   const {
     data,
     isLoading,
@@ -33,10 +33,10 @@ const Clinics = () => {
     selectedRowKeys,
     rowSelection,
     handleBulkDelete,
-    editingClinic,
+    editingOrganization,
     handleCloseEditModal,
     isViewModalVisible,
-    viewingClinic,
+    viewingOrganization,
     handleViewModalCancel,
     isCreateModalOpen,
     handleOpenCreateModal,
@@ -49,7 +49,7 @@ const Clinics = () => {
     setSubscriptionFilter,
     handleClearFilters,
     isSearching,
-  } = useClinicHooks();
+  } = useOrganizationHooks();
 
   const [isFilterVisible, setIsFilterVisible] = useState(false);
 
@@ -57,13 +57,13 @@ const Clinics = () => {
     refetch?.();
   };
 
-  const totalClinics = data?.clinics?.length || 0;
-  const activeClinics =
-    data?.clinics?.filter((c) => c.status === "Active").length || 0;
+  const totalOrganizations = data?.organizations?.length || 0;
+  const activeOrganizations =
+    data?.organizations?.filter((c) => c.status === "Active").length || 0;
   const totalBranches =
-    data?.clinics?.reduce((sum, c) => sum + (c.branches || 0), 0) || 0;
+    data?.organizations?.reduce((sum, c) => sum + (c.branches || 0), 0) || 0;
   const totalStaff =
-    data?.clinics?.reduce((sum, c) => sum + (c.staff || 0), 0) || 0;
+    data?.organizations?.reduce((sum, c) => sum + (c.staff || 0), 0) || 0;
   const hasSelectedRows = selectedRowKeys.length > 0;
 
   if (error) {
@@ -71,9 +71,10 @@ const Clinics = () => {
       <div className="flex items-center justify-center w-full h-full p-4 bg-gradient-to-br from-white to-slate-50">
         <div className="w-full max-w-2xl">
           <Alert
-            message="Error Loading Clinics"
+            message="Error Loading Organizations"
             description={
-              error.message || "Failed to load clinics data. Please try again."
+              error.message ||
+              "Failed to load organizations data. Please try again."
             }
             type="error"
             showIcon
@@ -97,28 +98,28 @@ const Clinics = () => {
           <div className="relative flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="space-y-2">
               <h1 className="text-2xl font-bold text-white sm:text-3xl">
-                Clinic Management
+                Organization Management
               </h1>
               <p className="text-purple-100">
-                Manage all clinics and their information
+                Manage all organizations and their information
               </p>
             </div>
 
             {/* Stats Cards */}
-            {totalClinics > 0 && (
+            {totalOrganizations > 0 && (
               <div className="flex gap-3 flex-wrap">
                 <div className="rounded-2xl bg-white/10 backdrop-blur-sm p-4 text-center min-w-[100px]">
                   <div className="text-2xl font-bold text-white">
-                    {totalClinics}
+                    {totalOrganizations}
                   </div>
                   <div className="text-sm font-medium text-purple-100">
-                    Total Clinics
+                    Total
                   </div>
                 </div>
 
                 <div className="rounded-2xl bg-white/10 backdrop-blur-sm p-4 text-center min-w-[100px]">
                   <div className="text-2xl font-bold text-green-300">
-                    {activeClinics}
+                    {activeOrganizations}
                   </div>
                   <div className="text-sm font-medium text-purple-100">
                     Active
@@ -145,9 +146,9 @@ const Clinics = () => {
           <div className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-sm text-gray-600">Total Clinics</div>
+                <div className="text-sm text-gray-600">Total Organizations</div>
                 <div className="text-2xl font-bold text-gray-900 mt-1">
-                  {totalClinics}
+                  {totalOrganizations}
                 </div>
               </div>
               <div className="p-3 bg-purple-50 rounded-2xl">
@@ -159,9 +160,9 @@ const Clinics = () => {
           <div className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-sm text-gray-600">Active Clinics</div>
+                <div className="text-sm text-gray-600">Active</div>
                 <div className="text-2xl font-bold text-green-600 mt-1">
-                  {activeClinics}
+                  {activeOrganizations}
                 </div>
               </div>
               <div className="p-3 bg-green-50 rounded-2xl">
@@ -208,7 +209,7 @@ const Clinics = () => {
                   Search
                 </label>
                 <Input
-                  placeholder="Search clinics..."
+                  placeholder="Search organizations..."
                   prefix={<Search className="w-4 h-4 text-gray-400" />}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
@@ -288,8 +289,8 @@ const Clinics = () => {
 
           {hasSelectedRows && (
             <Popconfirm
-              title="Delete Selected Clinics"
-              description={`Are you sure you want to delete ${selectedRowKeys.length} clinic(s)?`}
+              title="Delete Selected Organizations"
+              description={`Are you sure you want to delete ${selectedRowKeys.length} organization(s)?`}
               onConfirm={handleBulkDelete}
               okText="Delete"
               okType="danger"
@@ -317,17 +318,17 @@ const Clinics = () => {
                 border: "none",
               }}
             >
-              Add New Clinic
+              Add New Organization
             </Button>
           </div>
         </div>
 
         {/* Main Content - Table */}
         <div className="rounded-3xl bg-white shadow-lg ring-1 ring-gray-200">
-          {totalClinics === 0 && !isLoading ? (
+          {totalOrganizations === 0 && !isLoading ? (
             <div className="flex items-center justify-center py-16">
               <Empty
-                description="No Clinics Found"
+                description="No Organizations Found"
                 style={{ marginTop: 0, marginBottom: 0 }}
               >
                 <Button
@@ -340,14 +341,14 @@ const Clinics = () => {
                     border: "none",
                   }}
                 >
-                  Create First Clinic
+                  Create First Organization
                 </Button>
               </Empty>
             </div>
           ) : (
             <div className="p-6">
               <Table
-                dataSource={data?.clinics}
+                dataSource={data?.organizations}
                 columns={columns}
                 rowSelection={rowSelection}
                 loading={{
@@ -355,7 +356,7 @@ const Clinics = () => {
                   indicator: (
                     <Spin
                       size="large"
-                      tip="Loading clinics..."
+                      tip="Loading organizations..."
                       style={{ marginTop: 50 }}
                     />
                   ),
@@ -368,7 +369,7 @@ const Clinics = () => {
                   showSizeChanger: true,
                   showQuickJumper: true,
                   showTotal: (total, range) =>
-                    `${range[0]}–${range[1]} of ${total} clinics`,
+                    `${range[0]}–${range[1]} of ${total} organizations`,
                   pageSizeOptions: ["10", "20", "50", "100"],
                   size: "default",
                   responsive: true,
@@ -393,42 +394,42 @@ const Clinics = () => {
 
         {/* Modals */}
         <Drawer
-          title="Create New Clinic"
+          title="Create New Organization"
           placement="right"
           onClose={handleCloseCreateModal}
           open={isCreateModalOpen}
           width={600}
           styles={{ body: { paddingBottom: 80 } }}
         >
-          <ClinicForm
+          <OrganizationForm
             onSuccess={handleCloseCreateModal}
             onCancel={handleCloseCreateModal}
           />
         </Drawer>
 
         <Drawer
-          title="Edit Clinic"
+          title="Edit Organization"
           placement="right"
           onClose={handleCloseEditModal}
-          open={!!editingClinic}
+          open={!!editingOrganization}
           width={600}
           styles={{ body: { paddingBottom: 80 } }}
         >
-          <ClinicForm
-            clinic={editingClinic}
+          <OrganizationForm
+            organization={editingOrganization}
             onSuccess={handleCloseEditModal}
             onCancel={handleCloseEditModal}
           />
         </Drawer>
 
-        <ViewClinicModal
+        <ViewOrganizationModal
           open={isViewModalVisible}
           onClose={handleViewModalCancel}
-          clinic={viewingClinic}
+          organization={viewingOrganization}
         />
       </div>
     </div>
   );
 };
 
-export default Clinics;
+export default Organizations;

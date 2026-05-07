@@ -1,9 +1,5 @@
 import { Card, Row, Col, Statistic } from "antd";
-import {
-  UserOutlined,
-  CalendarOutlined,
-  DollarOutlined,
-} from "@ant-design/icons";
+import { UserOutlined, FileOutlined, RiseOutlined } from "@ant-design/icons";
 
 const Dashboard = () => {
   return (
@@ -19,7 +15,7 @@ const Dashboard = () => {
         <Col xs={24} sm={12} lg={8}>
           <Card>
             <Statistic
-              title="Total Patients"
+              title="Total Users"
               value={1234}
               prefix={<UserOutlined />}
               valueStyle={{ color: "var(--color-success)" }}
@@ -30,9 +26,9 @@ const Dashboard = () => {
         <Col xs={24} sm={12} lg={8}>
           <Card>
             <Statistic
-              title="Appointments Today"
+              title="Active Tasks"
               value={28}
-              prefix={<CalendarOutlined />}
+              prefix={<FileOutlined />}
               valueStyle={{ color: "var(--color-primary-color)" }}
             />
           </Card>
@@ -43,7 +39,7 @@ const Dashboard = () => {
             <Statistic
               title="Revenue This Month"
               value={45678}
-              prefix={<DollarOutlined />}
+              prefix={<RiseOutlined />}
               precision={2}
               valueStyle={{ color: "var(--color-error)" }}
             />

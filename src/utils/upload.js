@@ -3,7 +3,7 @@ import axios from "axios";
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 /**
- * Upload clinic logo
+ * Upload organization logo
  * @param {File} file - The file to upload
  * @returns {Promise<Object>} Upload response with file path
  */

@@ -206,10 +206,10 @@ export const useUserHooks = () => {
         width: 150,
         render: (position) => {
           const colors = {
-            Doctor: "blue",
-            Nurse: "green",
-            Receptionist: "purple",
-            Pharmacist: "orange",
+            Manager: "blue",
+            "Team Lead": "green",
+            Staff: "purple",
+            Support: "orange",
             Administrator: "red",
           };
           return (

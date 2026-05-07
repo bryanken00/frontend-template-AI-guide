@@ -11,22 +11,22 @@ import {
   Edit,
 } from "lucide-react";
 
-const ViewClinicModal = ({ open, onClose, clinic }) => {
-  if (!clinic) return null;
+const ViewOrganizationModal = ({ open, onClose, organization }) => {
+  if (!organization) return null;
 
   return (
     <Modal
       title={
         <div className="flex items-center gap-3">
           <Avatar
-            src={clinic.logo}
+            src={organization.logo}
             size={48}
             icon={<Building2 className="w-6 h-6" />}
           />
           <div>
-            <div className="text-lg font-semibold">{clinic.name}</div>
+            <div className="text-lg font-semibold">{organization.name}</div>
             <div className="text-sm text-gray-500 font-normal">
-              Clinic Details
+              Organization Details
             </div>
           </div>
         </div>
@@ -47,7 +47,7 @@ const ViewClinicModal = ({ open, onClose, clinic }) => {
             background: "linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)",
           }}
         >
-          Edit Clinic
+          Edit Organization
         </Button>,
       ]}
     >
@@ -56,19 +56,19 @@ const ViewClinicModal = ({ open, onClose, clinic }) => {
         <div className="flex items-center gap-2">
           <Tag
             icon={
-              clinic.status === "active" ? (
+              organization.status === "active" ? (
                 <CheckCircle className="w-3 h-3" />
               ) : (
                 <XCircle className="w-3 h-3" />
               )
             }
-            color={clinic.status === "active" ? "success" : "default"}
+            color={organization.status === "active" ? "success" : "default"}
             className="text-sm px-3 py-1"
           >
-            {clinic.status === "active" ? "Active" : "Inactive"}
+            {organization.status === "active" ? "Active" : "Inactive"}
           </Tag>
           <Tag color="blue" className="text-sm px-3 py-1">
-            {clinic.subscription}
+            {organization.subscription}
           </Tag>
         </div>
 
@@ -79,8 +79,8 @@ const ViewClinicModal = ({ open, onClose, clinic }) => {
             Basic Information
           </h3>
           <Descriptions column={1} bordered>
-            <Descriptions.Item label="Clinic Name">
-              {clinic.name}
+            <Descriptions.Item label="Organization Name">
+              {organization.name}
             </Descriptions.Item>
             <Descriptions.Item
               label={
@@ -90,7 +90,7 @@ const ViewClinicModal = ({ open, onClose, clinic }) => {
                 </span>
               }
             >
-              {clinic.address}, {clinic.city}
+              {organization.address}, {organization.city}
             </Descriptions.Item>
             <Descriptions.Item
               label={
@@ -100,7 +100,7 @@ const ViewClinicModal = ({ open, onClose, clinic }) => {
                 </span>
               }
             >
-              {clinic.phone}
+              {organization.phone}
             </Descriptions.Item>
             <Descriptions.Item
               label={
@@ -110,7 +110,7 @@ const ViewClinicModal = ({ open, onClose, clinic }) => {
                 </span>
               }
             >
-              {clinic.email}
+              {organization.email}
             </Descriptions.Item>
           </Descriptions>
         </div>
@@ -125,10 +125,14 @@ const ViewClinicModal = ({ open, onClose, clinic }) => {
           </h3>
           <Descriptions column={1} bordered>
             <Descriptions.Item label="Name">
-              {clinic.contactPerson}
+              {organization.contactPerson}
             </Descriptions.Item>
-            <Descriptions.Item label="Email">{clinic.email}</Descriptions.Item>
-            <Descriptions.Item label="Phone">{clinic.phone}</Descriptions.Item>
+            <Descriptions.Item label="Email">
+              {organization.email}
+            </Descriptions.Item>
+            <Descriptions.Item label="Phone">
+              {organization.phone}
+            </Descriptions.Item>
           </Descriptions>
         </div>
 
@@ -141,19 +145,19 @@ const ViewClinicModal = ({ open, onClose, clinic }) => {
             <div className="p-4 bg-blue-50 rounded-xl">
               <div className="text-sm text-gray-600 mb-1">Branches</div>
               <div className="text-2xl font-bold text-blue-600">
-                {clinic.branches}
+                {organization.branches}
               </div>
             </div>
             <div className="p-4 bg-purple-50 rounded-xl">
               <div className="text-sm text-gray-600 mb-1">Staff Members</div>
               <div className="text-2xl font-bold text-purple-600">
-                {clinic.staff}
+                {organization.staff}
               </div>
             </div>
             <div className="p-4 bg-green-50 rounded-xl">
               <div className="text-sm text-gray-600 mb-1">Subscription</div>
               <div className="text-lg font-bold text-green-600">
-                {clinic.subscription}
+                {organization.subscription}
               </div>
             </div>
           </div>
@@ -169,13 +173,15 @@ const ViewClinicModal = ({ open, onClose, clinic }) => {
           </h3>
           <Descriptions column={1} bordered>
             <Descriptions.Item label="Created Date">
-              {new Date(clinic.createdAt).toLocaleDateString("en-US", {
+              {new Date(organization.createdAt).toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "long",
                 day: "numeric",
               })}
             </Descriptions.Item>
-            <Descriptions.Item label="Clinic ID">{clinic.id}</Descriptions.Item>
+            <Descriptions.Item label="Organization ID">
+              {organization.id}
+            </Descriptions.Item>
           </Descriptions>
         </div>
       </div>
@@ -183,4 +189,4 @@ const ViewClinicModal = ({ open, onClose, clinic }) => {
   );
 };
 
-export default ViewClinicModal;
+export default ViewOrganizationModal;

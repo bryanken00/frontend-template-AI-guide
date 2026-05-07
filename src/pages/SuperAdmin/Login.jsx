@@ -15,8 +15,8 @@ const Login = () => {
 
   useEffect(() => {
     form.setFieldsValue({
-      email: "superadmin@clinic.com",
-      password: "Admin123!",
+      email: "",
+      password: "",
     });
   }, [form]);
 
@@ -183,7 +183,7 @@ const Login = () => {
         {/* Footer text */}
         <div className="text-center mt-8 text-gray-600 text-sm font-medium px-2">
           <span>
-            {`© ${currentYear} GoodHeart Life Center Corporation.`}
+            {`© ${currentYear} ${import.meta.env.VITE_APP_NAME || "Your Company"}.`}
             <br />
             All rights reserved.
           </span>

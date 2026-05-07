@@ -3,7 +3,8 @@
 @import "tailwindcss/theme.css" layer(theme);
 
 @theme {
-  /* Primary - Blue/Indigo Theme */
+  /* Primary - Blue/Indigo Theme (customize via VITE_PRIMARY_COLOR env var) */
+  --color-primary: #3b82f6;
   --color-primary-color: #3b82f6;
   --color-primary-dark: #1d4ed8;
   --color-primary-light: #60a5fa;

@@ -100,7 +100,7 @@ const UsersPage = () => {
                 User Management
               </h1>
               <p className="text-blue-100">
-                Manage clinic staff and their permissions
+                Manage team members and their permissions
               </p>
             </div>
 
@@ -173,10 +173,10 @@ const UsersPage = () => {
           <div className="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-sm text-gray-600">Doctors</div>
+                <div className="text-sm text-gray-600">Managers</div>
                 <div className="text-2xl font-bold text-blue-600 mt-1">
-                  {data?.users?.filter((u) => u.position === "Doctor").length ||
-                    0}
+                  {data?.users?.filter((u) => u.position === "Manager")
+                    .length || 0}
                 </div>
               </div>
               <div className="p-3 bg-blue-50 rounded-2xl">
@@ -190,8 +190,8 @@ const UsersPage = () => {
               <div>
                 <div className="text-sm text-gray-600">Staff</div>
                 <div className="text-2xl font-bold text-indigo-600 mt-1">
-                  {data?.users?.filter((u) => u.position !== "Doctor").length ||
-                    0}
+                  {data?.users?.filter((u) => u.position !== "Manager")
+                    .length || 0}
                 </div>
               </div>
               <div className="p-3 bg-indigo-50 rounded-2xl">
@@ -233,10 +233,10 @@ const UsersPage = () => {
                   className="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 >
                   <option value="">All positions</option>
-                  <option value="Doctor">Doctor</option>
-                  <option value="Nurse">Nurse</option>
-                  <option value="Receptionist">Receptionist</option>
-                  <option value="Pharmacist">Pharmacist</option>
+                  <option value="Manager">Manager</option>
+                  <option value="Team Lead">Team Lead</option>
+                  <option value="Staff">Staff</option>
+                  <option value="Support">Support</option>
                   <option value="Administrator">Administrator</option>
                 </select>
               </div>

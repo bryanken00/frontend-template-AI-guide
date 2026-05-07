@@ -76,7 +76,7 @@ const UserForm = ({ user = null, onSuccess, onCancel }) => {
         position: values.position,
         roleId: values.roleId,
         status: values.status,
-        clinicId: userData?.clinicId,
+        organizationId: userData?.organizationId,
       };
 
       if (isEditMode) {
@@ -116,7 +116,7 @@ const UserForm = ({ user = null, onSuccess, onCancel }) => {
         <p className="text-sm text-slate-500 ml-11">
           {isEditMode
             ? "Update user account and permissions"
-            : "Add a new team member to your clinic"}
+            : "Add a new team member to your organization"}
         </p>
       </div>
 
@@ -227,28 +227,28 @@ const UserForm = ({ user = null, onSuccess, onCancel }) => {
                 className="h-11 rounded-xl text-sm"
                 size="large"
               >
-                <Option value="Doctor">
+                <Option value="Manager">
                   <span className="flex items-center gap-2">
                     <Briefcase className="w-4 h-4" />
-                    Doctor
+                    Manager
                   </span>
                 </Option>
-                <Option value="Nurse">
+                <Option value="Team Lead">
                   <span className="flex items-center gap-2">
                     <Briefcase className="w-4 h-4" />
-                    Nurse
+                    Team Lead
                   </span>
                 </Option>
-                <Option value="Receptionist">
+                <Option value="Staff">
                   <span className="flex items-center gap-2">
                     <Briefcase className="w-4 h-4" />
-                    Receptionist
+                    Staff
                   </span>
                 </Option>
-                <Option value="Pharmacist">
+                <Option value="Support">
                   <span className="flex items-center gap-2">
                     <Briefcase className="w-4 h-4" />
-                    Pharmacist
+                    Support
                   </span>
                 </Option>
                 <Option value="Administrator">

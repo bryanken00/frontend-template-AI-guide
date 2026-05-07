@@ -60,7 +60,7 @@ const BasicLayout = ({ navigations, store }) => {
 
       <Layout className="site-layout">
         <Header
-          style={{ backgroundColor: "#3b82f6" }}
+          style={{ backgroundColor: "var(--color-primary, #3b82f6)" }}
           className="site-layout-background flex justify-between items-center h-[55px] text-white px-3 md:pr-7"
         >
           <div className="flex h-full items-center gap-3">

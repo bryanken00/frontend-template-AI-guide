@@ -15,20 +15,20 @@ import {
   AlertCircle,
 } from "lucide-react";
 import {
-  useGetClinics,
-  useDeleteClinic,
-} from "../../../services/requests/superadmin/clinics";
+  useGetOrganizations,
+  useDeleteOrganization,
+} from "../../../services/requests/superadmin/organizations";
 import { formatAddressByCode } from "../../../utils/address";
 import { getImageUrl } from "../../../utils/upload";
 
-export const useClinicHooks = () => {
+export const useOrganizationHooks = () => {
   // State
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [editingClinic, setEditingClinic] = useState(null);
+  const [editingOrganization, setEditingOrganization] = useState(null);
   const [isViewModalVisible, setIsViewModalVisible] = useState(false);
-  const [viewingClinic, setViewingClinic] = useState(null);
+  const [viewingOrganization, setViewingOrganization] = useState(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   // Filter state
@@ -45,7 +45,7 @@ export const useClinicHooks = () => {
     isLoading,
     error,
     refetch,
-  } = useGetClinics({
+  } = useGetOrganizations({
     page: currentPage,
     limit: pageSize,
     search: debouncedSearch,
@@ -54,90 +54,88 @@ export const useClinicHooks = () => {
   });
 
   // Mutations
-  const deleteClinicMutation = useDeleteClinic();
+  const deleteOrganizationMutation = useDeleteOrganization();
 
   // Transform API data to match component structure
   const transformedData = useMemo(() => {
-    if (!apiData?.data) return { clinics: [], pagination: {} };
+    if (!apiData?.data) return { organizations: [], pagination: {} };
 
-    const clinics = apiData.data.map((clinic) => ({
-      id: clinic.clinicId,
-      clinicId: clinic.clinicId,
-      name: clinic.name,
-      logo: clinic.logo ? getImageUrl(clinic.logo) : null,
+    const organizations = apiData.data.map((org) => ({
+      id: org.id,
+      name: org.name,
+      logo: org.logo ? getImageUrl(org.logo) : null,
       address: formatAddressByCode({
-        address1: clinic.address,
-        brgy: clinic.brgyCode,
-        city: clinic.citymunCode,
-        province: clinic.provCode,
-        region: clinic.regCode,
-        zipCode: clinic.zipCode,
+        address1: org.address,
+        brgy: org.brgyCode,
+        city: org.citymunCode,
+        province: org.provCode,
+        region: org.regCode,
+        zipCode: org.zipCode,
       }),
-      email: clinic.email,
-      phone: clinic.phone,
-      website: clinic.website,
-      branches: clinic.branches || 0,
-      staff: clinic.staff || 0,
-      status: clinic.status,
-      subscriptionPlan: clinic.subscriptionPlan,
-      createdAt: clinic.dateCreated,
+      email: org.email,
+      phone: org.phone,
+      website: org.website,
+      branches: org.branches || 0,
+      staff: org.staff || 0,
+      status: org.status,
+      subscriptionPlan: org.subscriptionPlan,
+      createdAt: org.dateCreated,
       // Keep original data for editing
-      regCode: clinic.regCode,
-      provCode: clinic.provCode,
-      citymunCode: clinic.citymunCode,
-      brgyCode: clinic.brgyCode,
-      zipCode: clinic.zipCode,
+      regCode: org.regCode,
+      provCode: org.provCode,
+      citymunCode: org.citymunCode,
+      brgyCode: org.brgyCode,
+      zipCode: org.zipCode,
     }));
 
     return {
-      clinics,
+      organizations,
       pagination: apiData.pagination || {},
     };
   }, [apiData]);
 
   // Action handlers
   const handleView = useCallback((record) => {
-    setViewingClinic(record);
+    setViewingOrganization(record);
     setIsViewModalVisible(true);
   }, []);
 
   const handleEdit = useCallback((record) => {
-    setEditingClinic(record);
+    setEditingOrganization(record);
   }, []);
 
   const handleDelete = useCallback(
     async (record) => {
       try {
-        await deleteClinicMutation.mutateAsync(record.clinicId);
+        await deleteOrganizationMutation.mutateAsync(record.id);
         setSelectedRowKeys((prev) => prev.filter((key) => key !== record.id));
       } catch (err) {
         console.error("Delete error:", err);
       }
     },
-    [deleteClinicMutation],
+    [deleteOrganizationMutation],
   );
 
   const handleBulkDelete = useCallback(async () => {
     try {
-      // Delete clinics one by one
-      for (const clinicId of selectedRowKeys) {
-        await deleteClinicMutation.mutateAsync(clinicId);
+      for (const id of selectedRowKeys) {
+        await deleteOrganizationMutation.mutateAsync(id);
       }
       setSelectedRowKeys([]);
     } catch (err) {
       console.error("Bulk delete error:", err);
     }
-  }, [selectedRowKeys, deleteClinicMutation]);
+  }, [selectedRowKeys, deleteOrganizationMutation]);
 
   // Modal handlers
   const handleCloseEditModal = useCallback(() => {
-    setEditingClinic(null);
+    setEditingOrganization(null);
     refetch();
   }, [refetch]);
 
   const handleViewModalCancel = useCallback(() => {
     setIsViewModalVisible(false);
-    setViewingClinic(null);
+    setViewingOrganization(null);
   }, []);
 
   const handleOpenCreateModal = useCallback(() => {
@@ -160,7 +158,7 @@ export const useClinicHooks = () => {
       },
       {
         key: "edit",
-        label: "Edit Clinic",
+        label: "Edit Organization",
         icon: <Edit className="w-4 h-4" />,
         onClick: () => handleEdit(record),
       },
@@ -169,7 +167,7 @@ export const useClinicHooks = () => {
       },
       {
         key: "delete",
-        label: "Delete Clinic",
+        label: "Delete Organization",
         icon: <Trash2 className="w-4 h-4" />,
         danger: true,
         onClick: () => handleDelete(record),
@@ -182,7 +180,7 @@ export const useClinicHooks = () => {
   const columns = useMemo(
     () => [
       {
-        title: "Clinic",
+        title: "Organization",
         dataIndex: "name",
         key: "name",
         fixed: "left",
@@ -354,10 +352,10 @@ export const useClinicHooks = () => {
     handleBulkDelete,
 
     // Modal states
-    editingClinic,
+    editingOrganization,
     handleCloseEditModal,
     isViewModalVisible,
-    viewingClinic,
+    viewingOrganization,
     handleViewModalCancel,
     isCreateModalOpen,
     handleOpenCreateModal,
