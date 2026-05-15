@@ -1,5 +1,6 @@
 ---
 inclusion: auto
+description: UI design system rules and component patterns for all page components.
 ---
 
 # UI Design System

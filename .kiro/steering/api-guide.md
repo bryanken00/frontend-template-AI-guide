@@ -1,5 +1,6 @@
 ---
 inclusion: auto
+description: API service and React Query hook conventions for all data-fetching modules.
 ---
 
 # API Service Guide

@@ -1,5 +1,6 @@
 ---
 inclusion: auto
+description: Folder structure and naming conventions for pages, modules, and services.
 ---
 
 # Folder Structure
